@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+form {
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+/* Center the account links container */
+.account-links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Style the links */
+.account-links a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Add hover effect for the links */
+.account-links a:hover {
+    text-decoration: underline;
+}
