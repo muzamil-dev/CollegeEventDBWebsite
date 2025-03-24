@@ -1,63 +1,57 @@
 <?php
 session_start();
 
-// Redirect logged-in users to the dashboard
-if (isset($_SESSION["user_id"])) {
-    header("Location: dashboard.php");
-    exit;
+// DB config — customize with your own values
+$host = 'localhost';
+$db   = 'college_events';
+$user = 'your_db_user';
+$pass = 'securepassword';
+$charset = 'utf8mb4';
+
+// DSN setup for PDO
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+];
+
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
 
-// Process the login form when a POST request is made
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Sanitize inputs
+$username = trim($_POST['username']);
+$password = trim($_POST['password']);
 
-    // Include database configuration
-    require_once "config.php";
+if (!$username || !$password) {
+    die("Please fill in both fields.");
+}
 
-    // Initialize error message variable
-    $error = "";
+// Query for the user
+$stmt = $pdo->prepare("SELECT user_id, username, password_hash, role FROM users WHERE username = :username");
+$stmt->execute(['username' => $username]);
+$user = $stmt->fetch();
 
-    // Validate input fields
-    if (empty(trim($_POST["username"])) || empty(trim($_POST["password"]))) {
-        $error = "Please enter both username and password.";
+if ($user && password_verify($password, $user['password_hash'])) {
+    // Success – start session
+    $_SESSION['user_id'] = $user['user_id'];
+    $_SESSION['username'] = $user['username'];
+    $_SESSION['role'] = $user['role'];
+
+    // Redirect based on role
+    if ($user['role'] === 'super_admin') {
+        header("Location: ../frontend/superadmin.php");
+    } elseif ($user['role'] === 'admin') {
+        header("Location: ../frontend/admin.php");
     } else {
-        $username = trim($_POST["username"]);
-        $password = trim($_POST["password"]);
-
-        // Prepare a SELECT statement using PDO
-        $sql = "SELECT id, username, password FROM users WHERE username = :username";
-
-        if ($stmt = $pdo->prepare($sql)) {
-            // Bind the username parameter
-            $stmt->bindParam(":username", $username, PDO::PARAM_STR);
-
-            if ($stmt->execute()) {
-                // Check if the username exists
-                if ($stmt->rowCount() == 1) {
-                    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        $id = $row["id"];
-                        $db_username = $row["username"];
-                        $hashed_password = $row["password"];
-
-                        // Verify the password
-                        if (password_verify($password, $hashed_password)) {
-                            // Correct password, start the session
-                            $_SESSION["user_id"] = $id;
-                            $_SESSION["username"] = $db_username;
-                            header("Location: dashboard.php");
-                            exit;
-                        } else {
-                            $error = "Invalid password.";
-                        }
-                    }
-                } else {
-                    $error = "No account found with that username.";
-                }
-            } else {
-                $error = "Something went wrong. Please try again later.";
-            }
-            unset($stmt);
-        }
+        header("Location: ../frontend/student.php");
     }
-    unset($pdo);
+    exit();
+} else {
+    // Invalid login
+    echo "<p>Invalid username or password. <a href='../frontend/login.html'>Try again</a></p>";
 }
 ?>
