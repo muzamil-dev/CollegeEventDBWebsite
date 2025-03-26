@@ -58,21 +58,136 @@ button:hover {
     text-decoration: underline;
 }
 
-.login-container {
-    background-color: rgba(255, 255, 255, 0.9); /* Slight transparency if desired */
-    width: 400px;
-    margin: 100px auto; /* Centers horizontally */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+/* === Student Dashboard Styles === */
+.student-body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background-color: #f5f5f5;
 }
 
-.text-box{
-    background: rgba(0, 0, 0, 0.6);
-    padding: 5px 10px;
-    border-radius: 4px;
-    display: inline-block;
-    color: #fff;
+.student-nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    color: white;
+    padding: 1rem 2rem;
 }
 
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-right .nav-link {
+    color: white;
+    margin-left: 1.5rem;
+    text-decoration: none;
+}
+
+.nav-right .nav-link:hover {
+    text-decoration: underline;
+}
+
+.logout-btn {
+    color: #ff7070;
+    font-weight: bold;
+}
+
+.student-dashboard {
+    padding: 2rem;
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.no-events-msg {
+    font-style: italic;
+    color: #999;
+}
+
+.event-feed {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.event-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event-title {
+    font-size: 1.25rem;
+}
+
+.event-tag {
+    background-color: #eee;
+    padding: 0.3rem 0.7rem;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.event-meta {
+    margin: 0.8rem 0;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+.event-description {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.event-comment-form label {
+    display: block;
+    margin: 0.5rem 0 0.25rem;
+}
+
+.comment-textarea {
+    width: 100%;
+    height: 60px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: vertical;
+}
+
+.rating-select {
+    width: 100%;
+    padding: 0.4rem;
+    margin-top: 0.3rem;
+    border-radius: 6px;
+}
+
+.submit-comment-btn {
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
+    background-color: #2a8df5;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.submit-comment-btn:hover {
+    background-color: #196ed0;
+}
 
