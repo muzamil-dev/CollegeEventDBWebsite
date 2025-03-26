@@ -3,6 +3,9 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+    background: url('../frontend/images/blogs.png') no-repeat center center fixed;
+    font-family: sans-serif;
+    background-size: cover;
 }
 
 h1, h2 {
@@ -54,3 +57,22 @@ button:hover {
 .account-links a:hover {
     text-decoration: underline;
 }
+
+.login-container {
+    background-color: rgba(255, 255, 255, 0.9); /* Slight transparency if desired */
+    width: 400px;
+    margin: 100px auto; /* Centers horizontally */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.text-box{
+    background: rgba(0, 0, 0, 0.6);
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    color: #fff;
+}
+
+
