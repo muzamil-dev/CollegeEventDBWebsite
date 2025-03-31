@@ -191,3 +191,16 @@ button:hover {
     background-color: #196ed0;
 }
 
+.form-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  /* make sure form elements don’t overflow due to box-sizing */
+  input, select, textarea, button {
+    box-sizing: border-box;
+  }
