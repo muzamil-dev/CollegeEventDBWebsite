@@ -31,6 +31,17 @@ if ($_SESSION['user_level'] == 'student') {
         $sql .= " WHERE 1=0"; 
     }
 }
+// Get user's previous rating (if any)
+$user_id = $_SESSION['user_id'];
+$event_id = $row['id'];
+$rating_val = 0;
+
+$rating_query = "SELECT rating FROM ratings WHERE user_id = $user_id AND event_id = $event_id LIMIT 1";
+$rating_result = $conn->query($rating_query);
+if ($rating_result && $rating_result->num_rows > 0) {
+    $rating_row = $rating_result->fetch_assoc();
+    $rating_val = (int) $rating_row['rating'];
+}
 
 
 $result = $conn->query($sql);
@@ -51,45 +62,129 @@ $result = $conn->query($sql);
 
 
     <style>
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 15px;
+}
 
-        .form-container {
-        display: flex;
-        justify-content: center;
-        
-        min-height: 100vh; 
-        }
+.card {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 550px;
+    text-align: center;
+    border: 1px solid #eee;
+}
 
-        .card {
-        background-color: #E5F0FA;
-        padding: 20px 40px;
-        border-radius: 15px;
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-        width: 500px;
-        text-align: center;
-        }
+.card h1,
+.card h2,
+.card h4 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #222;
+}
 
-        .card h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+.card ul {
+    list-style: none;
+    padding-left: 0;
+}
 
-        .card input[type="email"], .card input[type="text"], .card input[type="datetime-local"] {
-            margin-bottom: 15px;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-            background: #ffffff;
-        }
+.card li {
+    margin-bottom: 35px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #eee;
+}
 
-        .card textarea {
-            margin-bottom: 15px;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-            background: #ffffff;
-        }
+.card input[type="email"],
+.card input[type="text"],
+.card input[type="datetime-local"],
+.card textarea {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    padding: 12px 14px;
+    border-radius: 8px;
+    width: 100%;
+    background: #ffffff;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.card input:focus,
+.card textarea:focus {
+    border-color: #aaa;
+    outline: none;
+}
+
+.card textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.card .btn,
+.card button {
+    width: 100%;
+    margin: 8px 0;
+    background-color: #181E26;
+    color: white;
+    border: none;
+    padding: 10px 0;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card .btn:hover,
+.card button:hover {
+    background-color: #333;
+}
+
+.card .comments {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.card .comment {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.card .rating {
+    direction: rtl;
+    display: inline-flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.card .rating input {
+    display: none;
+}
+
+.card .rating label {
+    font-size: 26px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin: 0 2px;
+}
+
+.card .rating input:checked ~ label,
+.card .rating label:hover,
+.card .rating label:hover ~ label {
+    color: gold;
+}
 
         .btn {
         width: 100%;
@@ -115,6 +210,31 @@ $result = $conn->query($sql);
             padding: 10px;
             margin-bottom: 10px;
         }
+
+        .rating {
+    direction: rtl;
+    display: inline-flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    font-size: 24px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.rating input:checked ~ label,
+.rating label:hover,
+.rating label:hover ~ label {
+    color: gold;
+}
+
         
     </style>
 
@@ -184,11 +304,22 @@ $result = $conn->query($sql);
                                 }
                                 ?>
                             </ul>
+                            <!-- Rating Form -->
+                            <form action="rate_event.php" method="POST">
+                                <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
+                                <div class="rating">
+                                    <?php for ($i = 5; $i >= 1; $i--): ?>
+                                        <input type="radio" name="rating" value="<?php echo $i; ?>" id="star<?php echo $i . '-' . $event_id; ?>" <?php if ($rating_val == $i) echo 'checked'; ?>>
+                                        <label for="star<?php echo $i . '-' . $event_id; ?>">★</label>
+                                    <?php endfor; ?>
+                                </div>
+                                <button type="submit" name="rate_event">Rate Event</button>
+                            </form>
                         </li>
                     <?php endwhile; ?>
                 </ul>
             <?php else: ?>
-                <p>No events found.</p>
+                <p>No events</p>
             <?php endif; ?>
         </div>
     </div>

@@ -73,36 +73,87 @@
         }
 
         .card {
-        background-color: #E5F0FA;
-        padding: 20px 40px;
-        border-radius: 15px;
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-        width: 500px;
-        text-align: center;
-        }
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    border: 1px solid #eee;
+}
 
-        .card h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+.card h1, .card h2, .card h3 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
 
-        .card input[type="email"], .card input[type="text"], .card input[type="datetime-local"] {
-            margin-bottom: 15px;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-            background: #ffffff;
-        }
+.card select,
+.card input[type="text"],
+.card input[type="email"] {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+    border-radius: 6px;
+    width: 100%;
+    background: #ffffff;
+    font-size: 14px;
+}
 
-        .card option{
-            margin-bottom: 15px;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-            background: #ffffff;
-        }
+.card select {
+    appearance: none;
+}
+
+.card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.card li {
+    background: #f8f9fa;
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 15px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.card .btn {
+    width: 100%;
+    margin: 5px 0;
+    background-color: #181E26;
+    color: white;
+    border: none;
+    padding: 10px 0;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card .btn:hover {
+    background-color: #333;
+}
+
+.card .btn-leave {
+    width: 100%;
+    margin-top: 10px;
+    background: #ffecec;
+    color: #d9534f;
+    border: 1px solid #f5c6cb;
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.card .btn-leave:hover {
+    background: #f8d7da;
+}
+
 
         .btn {
         width: 100%;
@@ -186,7 +237,8 @@
                 <br>
                 <ul>
                     <?php while ($row = $rso_result->fetch_assoc()): ?>
-                        <li><h4><?php echo $row['name']; ?> - <h4>
+                        <li>
+                            <strong><?php echo $row['name']; ?></strong>
                             <form action="join_rso.php" method="POST">
                                 <input type="hidden" name="rso_id" value="<?php echo $row['id']; ?>">
                                 <button type="submit" name="leave_rso" class="btn-leave">Leave RSO</button>
@@ -194,6 +246,7 @@
                         </li>
                     <?php endwhile; ?>
                 </ul>
+
             <?php else: ?>
                 <p>You are currently not a member of any RSOS.</p>
             <?php endif; ?>
